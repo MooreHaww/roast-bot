@@ -1,6 +1,6 @@
 # roast-bot
 
-A small Discord bot for a private  server. When one particular user uses one of his "favourite" words, the bot replies to his message with a random (friendly) roast.
+A small Discord bot for a private server. When one particular user uses one of his "favourite" words, the bot replies to his message with a random (friendly) roast.
 
 ## Why this project exists
 
@@ -41,7 +41,7 @@ Before running, put your target user ID and category IDs in the config block at 
 
 ## Setup from zero (step by step)
 
-New to Python or Discord bots? This is the full walkthrough, with no knowledge assumed. It takes about 20 minutes. The Install section above is the short version of the same steps.
+New to Python or Discord bots? This is the full walkthrough, with no knowledge assumed. It takes about 20 minutes. The Quick start above is the short version of the same steps.
 
 These commands are for Windows PowerShell. On Mac or Linux, activate the environment with `source .venv/bin/activate` and use `cp` instead of `Copy-Item`.
 
@@ -280,7 +280,7 @@ python -m pytest -v
 
 ## Measured response time
 
-**_TBD_ ms**: the time between his message and the bot's reply, measured with Discord's own timestamps on both messages (`reply.created_at - message.created_at`) and logged for every reply.
+**~670 ms** median over 18 replies (range 195 to 2841 ms): the time between his message and the bot's reply, measured with Discord's own timestamps on both messages (`reply.created_at - message.created_at`) and logged for every reply. This was measured with the bot running on a home PC in Istanbul through a VPN, so a bot hosted closer to Discord's servers should be faster.
 
 ## Customizing and extending
 
