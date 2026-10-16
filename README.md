@@ -23,34 +23,21 @@ It started as a joke. I also used it as a chance to build something small with r
 - Sends exactly one reply per message, even when the message contains several trigger words.
 - Has **no cooldown**: every message that contains a trigger word gets an immediate reply.
 
-## Install
+## Quick start
 
-You need:
-
-- Python 3.10 or newer (developed on 3.14).
-- A Discord bot application. Create one in the [Discord Developer Portal](https://discord.com/developers/applications). Under **Bot → Privileged Gateway Intents**, turn on **Message Content Intent**.
-- The bot invited to your server with the **Send Messages**, **Send Messages in Threads** and **Read Message History** permissions.
-
-Then, in PowerShell from the project folder:
+For experienced users. You need Python 3.10+ and a Discord bot with **Message Content Intent** turned on.
 
 ```powershell
-# 1. Create and activate a virtual environment
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-
-# 2. Install dependencies
-pip install -r requirements.txt          # what the bot needs to run
-pip install -r requirements-dev.txt      # the same, plus pytest for the tests
-
-# 3. Add your bot token: copy the example, then open .env and paste the token
-Copy-Item .env.example .env
-
-# 4. Create your own lists: copy each example file to its real name, then edit it
+pip install -r requirements.txt
+Copy-Item .env.example .env                           # paste your bot token into .env
 Copy-Item trigger-words.example.txt trigger-words.txt
-Copy-Item insults.example.txt insults.txt
+Copy-Item insults.example.txt insults.txt             # then edit both lists
+python bot.py
 ```
 
-`.env`, `trigger-words.txt` and `insults.txt` are listed in `.gitignore`, so your token and your real lists never end up in git. Only the `.example` files are committed.
+Before running, put your target user ID and category IDs in the config block at the top of `bot.py`. `.env`, `trigger-words.txt` and `insults.txt` are in `.gitignore`, so your token and real lists never end up in git. New to this? Follow the full walkthrough below.
 
 ## Setup from zero (step by step)
 
