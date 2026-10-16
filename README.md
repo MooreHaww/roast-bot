@@ -1,14 +1,12 @@
 # roast-bot
 
-A small Discord bot for a private family server. When one particular family member uses one of his favourite words, the bot replies to his message with a random (friendly) roast.
-
-![Demo](docs/demo.png)
+A small Discord bot for a private  server. When one particular user uses one of his "favourite" words, the bot replies to his message with a random (friendly) roast.
 
 ## Why this project exists
 
-It started as a family joke. I also used it as a chance to build something small with real users, and to do the basics properly instead of copying a tutorial. Even a tiny bot needs the things that matter in production code:
+It started as a joke. I also used it as a chance to build something small with real users, and to do the basics properly instead of copying a tutorial. Even a tiny bot needs the things that matter in production code:
 
-- **Secrets handling:** the bot token is loaded from a `.env` file. It is never hardcoded, logged or committed.
+- **Secrets handling:** the bot token is loaded from a `.env` file. It is never hardcoded, logged, or committed.
 - **Careful text matching:** the regex is case-insensitive, matches whole words only, and escapes its input, so "bs" does not match inside "absolutely".
 - **Fair randomness:** a shuffle bag uses every insult once before any repeats, and never sends the same insult twice in a row.
 - **Hot reload:** the word and insult lists can be edited while the bot runs, with no restart. A broken edit is rejected and the last good list is kept.
