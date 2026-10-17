@@ -46,19 +46,149 @@ Example console output:
 
 **Measured:** about **670 ms** median over 18 replies (range 195 to 2841 ms), taken from Discord's own timestamps on his message and the reply. The bot ran on a home PC in Istanbul through a VPN, so a host closer to Discord should be faster.
 
-## ⚙️ Setup
+## Quick start
 
-You need Python 3.10+ and a Discord bot with **Message Content Intent** turned on. Commands below are for Windows PowerShell; on Mac or Linux use `source .venv/bin/activate` and `cp`.
+For experienced users. You need Python 3.10+ and a Discord bot with **Message Content Intent** turned on.
 
 ```powershell
-git clone https://github.com/MooreHaww/roast-bot.git
-cd roast-bot
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 Copy-Item .env.example .env                           # paste your bot token into .env
 Copy-Item trigger-words.example.txt trigger-words.txt
 Copy-Item insults.example.txt insults.txt             # then edit both lists
+python bot.py
+```
+
+Before running, put your target user ID and category IDs in the config block at the top of `bot.py`. `.env`, `trigger-words.txt` and `insults.txt` are in `.gitignore`, so your token and real lists never end up in git. New to this? Follow the full walkthrough below.
+
+## Setup from zero (step by step)
+
+New to Python or Discord bots? This is the full walkthrough, with no knowledge assumed. It takes about 20 minutes. The Quick start above is the short version of the same steps.
+
+These commands are for Windows PowerShell. On Mac or Linux, activate the environment with `source .venv/bin/activate` and use `cp` instead of `Copy-Item`.
+
+### Step 1: Install Python
+
+1. Download Python 3.10 or newer from [python.org/downloads](https://www.python.org/downloads/).
+2. In the installer, **tick "Add python.exe to PATH"** before you click Install. This is the step people forget.
+3. Open PowerShell and check it worked:
+
+```powershell
+python --version
+```
+
+You should see something like `Python 3.14.x`.
+
+### Step 2: Get the project and open a terminal in it
+
+1. Download the project as a ZIP (on GitHub: **Code → Download ZIP**) and extract it, or clone it with git.
+2. Open the extracted folder in File Explorer, click the address bar at the top, type `powershell` and press Enter. A terminal opens already inside the project folder.
+
+### Step 3: Create the environment and install the dependencies
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+When it works, your prompt starts with `(.venv)`. If PowerShell says running scripts is disabled, run this once and try again:
+
+```powershell
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### Step 4: Create your own bot on Discord
+
+Every person needs their own bot. Never share a bot token (see the warning in Step 6).
+
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and click **New Application**. Give it a name and click **Create**.
+2. Open the **Bot** tab in the left sidebar.
+3. Turn **Public Bot** off, so only you can add it to servers.
+4. Scroll to **Privileged Gateway Intents** and turn **Message Content Intent** on. Without it the bot cannot read messages. Leave the other two intents off.
+5. Click **Save Changes**.
+6. If you see a red error saying a private application cannot have a default authorization link, open **Installation** in the left sidebar, set **Install Link** to **None**, save, and go back to the Bot tab.
+
+### Step 5: Invite the bot to your server
+
+1. In the Developer Portal, open **OAuth2**, then scroll to **OAuth2 URL Generator**.
+2. Under **Scopes**, tick only **bot**.
+3. Under **Bot Permissions**, tick **View Channels**, **Send Messages**, **Send Messages in Threads** and **Read Message History**. Tick nothing else, and especially not Administrator.
+4. Copy the **Generated URL** at the bottom and open it in your browser.
+5. Choose your server in the dropdown and click **Authorize**. You need the **Manage Server** permission in that server.
+
+The bot now appears in your member list, shown as offline until you run it.
+
+### Step 6: Put your bot token in `.env`
+
+1. In the Developer Portal, open the **Bot** tab, click **Reset Token**, confirm, and click **Copy**. Discord shows the token **only once**.
+2. Create your settings file and open it:
+
+```powershell
+Copy-Item .env.example .env
+notepad .env
+```
+
+3. Replace everything after the `=` with your token, so the line looks like this, with no spaces and no quotes:
+
+```text
+DISCORD_TOKEN=paste-your-token-here
+```
+
+4. Save the file.
+
+**Warning:** the token is the bot's password. Never post it in chat, in a screenshot, or on GitHub. The `.env` file is already listed in `.gitignore`, so git ignores it. If a token ever leaks, click **Reset Token** again and paste the new one. The old one stops working immediately.
+
+### Step 7: Create your lists
+
+```powershell
+Copy-Item trigger-words.example.txt trigger-words.txt
+Copy-Item insults.example.txt insults.txt
+```
+
+Open both files in Notepad or VS Code and replace the sample lines with your own. Keep the format: one entry per line, starting with a number, a dot and a space (`1. word`). Trigger words have no final dot, and insults end with theirs. Save both files as UTF-8. More details are in "Editing trigger words and insults" below.
+
+### Step 8: Tell the bot who to watch and where
+
+The bot needs three kinds of Discord IDs.
+
+1. In Discord, open **User Settings → Advanced** and turn on **Developer Mode**.
+2. Right-click the target person's name and choose **Copy User ID**.
+3. Right-click each **category** (the group header in the channel list) the bot should watch, and choose **Copy Category ID**.
+4. Open `bot.py` (`notepad bot.py` works) and replace the example numbers in the config block at the top:
+
+```python
+TARGET_USER_ID = 123456789012345678
+
+ALLOWED_CATEGORY_IDS = frozenset({
+    111111111111111111,
+    222222222222222222,
+})
+```
+
+Each category ID goes on its own line, followed by a comma. Save the file.
+
+### Step 9: Run it
+
+```powershell
+python bot.py
+```
+
+Wait for these two lines:
+
+```text
+Loaded 3 trigger words and 3 insults
+Ready: logged in as YourBot#1234 (id ...)
+```
+
+Your bot now shows as online in Discord. Test it by writing a trigger word as the target user in a channel under one of your categories. To test on your own, temporarily put your own user ID in `TARGET_USER_ID`, restart the bot, and change it back afterwards. Press `Ctrl+C` in the terminal to stop the bot.
+
+Every time you want to run it later:
+
+```powershell
+cd path\to\roast-bot
+.\.venv\Scripts\Activate.ps1
 python bot.py
 ```
 
